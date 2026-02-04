@@ -2,12 +2,13 @@ package dev.paraspatil.buildpulse
 
 import dev.paraspatil.buildpulse.model.BuildDiff
 import dev.paraspatil.buildpulse.model.BuildMetrics
+import org.slf4j.Logger
 
-class ReportGenerator {
+object ReportGenerator {
     fun printReport(
         current: BuildMetrics,
-        diff: BuildDiff,
-        maxAllowedIncreaseMs: Long
+        diff: BuildDiff?,
+        maxAllowedIncreaseMs: Long,
     ){
         val lines=mutableListOf<String>()
 
