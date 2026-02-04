@@ -23,3 +23,5 @@ rootProject.name = "buildpulse-android"
 include(":app")
 include(":feature-login")
 include(":core-network")
+
+includeBuild("plugin")
