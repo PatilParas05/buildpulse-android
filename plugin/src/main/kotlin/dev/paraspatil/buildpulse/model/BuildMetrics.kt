@@ -12,8 +12,8 @@ data class BuildDiff(
     val totalDiffMs: Long,
     val moduleDiffs: Map<String, Long>,
     val taskDiffs: Map<String, Long>,
-    val newModule: Set<String>,
-    val removeModule: Set<String>
+    val newModules: Set<String>,
+    val removedModules: Set<String>
 )
 
 data class RegressionViolation(
