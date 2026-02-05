@@ -1,3 +1,4 @@
+includeBuild("plugin")
 pluginManagement {
     repositories {
         google {
@@ -24,4 +25,3 @@ include(":app")
 include(":feature-login")
 include(":core-network")
 
-includeBuild("plugin")

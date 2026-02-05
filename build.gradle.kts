@@ -4,4 +4,14 @@ plugins {
     alias(libs.plugins.kotlin.compose) apply false
     alias(libs.plugins.android.library) apply false
     alias(libs.plugins.jetbrains.kotlin.jvm) apply false
+    id("dev.paraspatil.buildpulse-android")
+}
+
+buildPulse {
+    enabled = true
+    trackTasks = true
+    trackModules = true
+    failOnRegression = false
+    maxAllowedIncreaseMs = 500L
+    outputDir = "build/reports/buildpulse"
 }

@@ -48,4 +48,35 @@ class MetricsComparatorTest {
         assertEquals(-120L,diff.moduleDiffs["core-network"])
 
     }
+    @Test
+    fun `tracks newly added modules`(){
+        val current=baseline.copy(
+            modules = baseline.modules+("features-onboarding" to 1_500L)
+        )
+        val diff = MetricsComparator.compare(baseline,current)!!
+
+        assertTrue("features-onboarding" in diff.newModules)
+        assertFalse(diff.moduleDiffs.containsKey("features-onboarding"))
+
+    }
+    @Test
+    fun `tracks removed modules`(){
+        val current=baseline.copy(
+            modules = baseline.modules-("core-network")
+        )
+        val diff = MetricsComparator.compare(baseline,current)!!
+
+        assertTrue("core-network" in diff.removedModules)
+    }
+    @Test
+    fun `zero change produces all zeros`() {
+    val diff = MetricsComparator.compare(baseline, baseline)!!
+
+        assertEquals(0L,diff.totalDiffMs)
+        assertTrue(diff.moduleDiffs.values.all{ it == 0L})
+        assertTrue(diff.taskDiffs.values.all{ it == 0L})
+        assertTrue(diff.newModules.isEmpty())
+        assertTrue(diff.removedModules.isEmpty())
+
+    }
 }
