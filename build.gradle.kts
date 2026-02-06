@@ -13,5 +13,5 @@ buildPulse {
     trackModules = true
     failOnRegression = false
     maxAllowedIncreaseMs = 500L
-    outputDir = "build/reports/buildpulse"
+    outputDir = "buildpulse"
 }

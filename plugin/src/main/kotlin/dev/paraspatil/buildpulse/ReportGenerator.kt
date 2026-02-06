@@ -19,7 +19,7 @@ object ReportGenerator {
         lines += ""
 
         val totalSec=current.totalBuildTimeMs/1_000.0
-        val totalLabel=if (diff!=null)formatDiff(diff.totalDiffMs,maxAllowedIncreaseMs) else "(first run)"
+        val totalLabel=if (diff!=null)formatDiff(diff.totalDiffMs,maxAllowedIncreaseMs) else "first run"
         lines+="Total build time: ${"%.1f".format(totalSec)}seconds ($totalLabel)"
         lines+=""
 

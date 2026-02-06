@@ -6,5 +6,5 @@ open class BuildPulseExtension{
     var trackModules: Boolean=true
     var failOnRegression: Boolean=false
     var maxAllowedIncreaseMs: Long=500L
-    var outputDir : String="build/reports/buildpulse"
+    var outputDir : String="buildpulse"
 }

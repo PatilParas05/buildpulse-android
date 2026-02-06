@@ -1,15 +1,32 @@
 package dev.paraspatil.buildpulse
 
 import dev.paraspatil.buildpulse.model.BuildMetrics
+import jdk.internal.platform.Container.metrics
 
 import java.io.File
 
 class MetricsStore(private val metricsFile: File){
 
     fun save(metrics: BuildMetrics){
-        metricsFile.parentFile?.mkdirs()
+       val parentDir =metricsFile.parentFile
+        if (parentDir!=null && !parentDir.exists()){
+            val created=parentDir.mkdirs()
+            if (!created && !parentDir.exists()) {
+                throw IllegalStateException(
+                    "Failed to create parent directories :${parentDir.absolutePath}"
+                )
+            }
+        }
+
+    try{
         metricsFile.writeText(serialize(metrics))
+    }catch (e: Exception)
+    {
+        throw IllegalStateException(
+            "Failed to save metrics to ${metricsFile.absolutePath}", e
+        )
     }
+}
 
     fun loadPrevious(): BuildMetrics?{
         if (!metricsFile.exists())return null
@@ -21,14 +38,18 @@ class MetricsStore(private val metricsFile: File){
     }
 
     private fun serialize(m: BuildMetrics): String{
-        val sb= StringBuilder()
-        sb.appendLine("{")
-        sb.appendLine("  \"buildTimestamp\": ${m.buildTimestamp},")
-        sb.appendLine("  \"totalBuildTimeMs\": ${m.totalBuildTimeMs},")
-        sb.appendLine("  \"modules\": ${mapToJson(m.modules)},")
-        sb.appendLine("  \"tasks\": ${mapToJson(m.tasks)},")
-        sb.appendLine("}")
-        return sb.toString()
+       return buildString {
+           appendLine("{")
+           appendLine("    \"buildTimestamp\": ${m.buildTimestamp},")
+           appendLine("    \"totalBuildTimeMs\": ${m.totalBuildTimeMs},")
+           append("  \"modules\": ")
+           append(mapToJson(m.modules))
+           appendLine(",")
+           append("    \"tasks\": ")
+           append(mapToJson(m.tasks))
+           appendLine()
+            append("}")
+       }
     }
 
     private fun deserialize(json: String): BuildMetrics{
@@ -69,7 +90,7 @@ class MetricsStore(private val metricsFile: File){
         if (braceEnd==-1)return emptyMap()
 
         val block=json.substring(braceStart+1,braceEnd)
-        val entryRegex=Regex("\"([^\"]+)\"\\s*:\\s*([^\"]+)")
+        val entryRegex=Regex("\"([^\"]+)\"\\s*:\\s*(\\d+)")
 
         return entryRegex.findAll(block).associate { match ->
         match.groupValues[1] to match.groupValues[2].toLong()
