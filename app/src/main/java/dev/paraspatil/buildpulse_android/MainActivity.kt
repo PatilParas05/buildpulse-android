@@ -16,32 +16,20 @@ import dev.paraspatil.buildpulse_android.ui.theme.BuildpulseandroidTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            BuildpulseandroidTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
-            }
+        fun dummy1(){println("test")}
+        fun dummy2(){println("test")}
+        fun dummy3(){println("test")}
+        fun dummy4(){println("test")}
+        fun dummy5(){println("test")}
+        fun dummy6(){println("test")}
+        fun dummy7(){println("test")}
+        fun dummy8(){println("test")}
+        fun dummy9(){println("test")}
+        fun dummy10(){println("test")}
+        fun dummy11(){println("test")}
+        fun dummy12(){println("test")}
+
         }
     }
-}
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    BuildpulseandroidTheme {
-        Greeting("Android")
-    }
-}

@@ -55,7 +55,7 @@ object ReportGenerator {
     private fun formatDiff(diffMs: Long, threshold: Long): String = when{
         diffMs>threshold -> "(+${diffMs} ms ⚠️  regression)"
         diffMs>0 -> "(+${diffMs} ms)"
-        diffMs<0 -> "(-${diffMs} ms ✅)"
+        diffMs< 0 -> "(-${diffMs} ms ✅)"
         else -> "(no change)"
 
     }
