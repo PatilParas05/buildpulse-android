@@ -7,4 +7,5 @@ open class BuildPulseExtension{
     var failOnRegression: Boolean=false
     var maxAllowedIncreaseMs: Long=500L
     var outputDir : String="buildpulse"
+    var generatedHtmlReport : Boolean=true
 }

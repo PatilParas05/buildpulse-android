@@ -14,4 +14,5 @@ buildPulse {
     failOnRegression = false
     maxAllowedIncreaseMs = 500L
     outputDir = "buildpulse"
+    generatedHtmlReport = true
 }

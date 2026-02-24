@@ -30,6 +30,12 @@ class BuildPulsePlugin : Plugin<Project> {
 
             ReportGenerator.printReport(current, diff, ext.maxAllowedIncreaseMs)
 
+            if (ext.generatedHtmlReport){
+                val htmlFile = File(outputDir, "build-metrics.html")
+                HtmlReportGenerator.generate(current, diff, htmlFile, ext.maxAllowedIncreaseMs)
+                project.logger.lifecycle("[BuildPulse] HTML report  ${htmlFile.absolutePath}")
+
+            }
             CIEnforcer.evaluate(
                 diff = diff,
                 previous = previous,
