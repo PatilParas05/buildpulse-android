@@ -2,9 +2,10 @@
 plugins {
     `java-gradle-plugin`
     kotlin("jvm") version "2.2.10"
+    `maven-publish`
 }
 
-group = "dev.paraspatil"
+group = "com.github.PatilParas05"
 version = "0.1.0"
 
 repositories {
@@ -16,6 +17,16 @@ gradlePlugin {
         create("buildPulse") {
             id = "dev.paraspatil.buildpulse-android"
             implementationClass = "dev.paraspatil.buildpulse.BuildPulsePlugin"
+        }
+    }
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("release") {
+            from(components["java"])
+            artifactId = "buildpulse-android"
+
         }
     }
 }

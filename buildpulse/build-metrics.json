@@ -1,0 +1,10 @@
+{
+    "buildTimestamp": 1771925041142,
+    "totalBuildTimeMs": 681,
+  "modules": {
+    "root": 0
+},
+    "tasks": {
+    ":prepareKotlinBuildScriptModel": 0
+}
+}
