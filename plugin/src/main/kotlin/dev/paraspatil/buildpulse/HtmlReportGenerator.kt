@@ -337,7 +337,7 @@ return """
             val diffHtml = if (diffMs != null) {
                 val sign = if (diffMs > 0) "+" else ""
                 val className = if (diffMs > threshold) "positive" else "negative"
-                "<div class='module-diff diff $className'>$sign$diffMs ms from previous build</sdiv>"
+                "<div class='module-diff diff $className'>$sign$diffMs ms from previous build</div>"
             } else {
                 ""
             }

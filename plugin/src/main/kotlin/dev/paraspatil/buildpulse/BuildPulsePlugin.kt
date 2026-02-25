@@ -6,7 +6,13 @@ import org.gradle.api.Plugin
 import java.io.File
 
 class BuildPulsePlugin : Plugin<Project> {
+    @Suppress("DEPRECATION")
     override fun apply(project: Project) {
+        if (project != project.rootProject){
+            project.logger.warn("[BuildPulse] This plugin should only be applied to the root project")
+            return
+        }
+
         val ext = project.extensions.create("buildPulse", BuildPulseExtension::class.java)
 
         val buildStartMs = System.currentTimeMillis()
