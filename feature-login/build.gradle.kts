@@ -4,9 +4,7 @@ plugins {
 
 android {
     namespace = "dev.paraspatil.feature_login"
-    compileSdk {
-        version = release(36)
-    }
+    compileSdk = 36
 
     defaultConfig {
         minSdk = 26

@@ -5,9 +5,7 @@ plugins {
 
 android {
     namespace = "dev.paraspatil.buildpulse_android"
-    compileSdk {
-        version = release(36)
-    }
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "dev.paraspatil.buildpulse_android"
