@@ -6,10 +6,10 @@ import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
 
-object HtmlReportGenerator{
+object HtmlReportGenerator {
 
     fun generate(
-        current : BuildMetrics,
+        current: BuildMetrics,
         diff: BuildDiff?,
         outputFilePath: File,
         maxAllowedIncreaseMs: Long
@@ -19,6 +19,7 @@ object HtmlReportGenerator{
         outputFilePath.writeText(html)
 
     }
+
     private fun buildHtmlReport(
         current: BuildMetrics,
         diff: BuildDiff?,
@@ -26,7 +27,7 @@ object HtmlReportGenerator{
     ): String {
         val timestamp = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date(current.buildTimestamp))
         val totalSec = current.totalBuildTimeMs / 1_000.0
-return """
+        return """
     <!DOCTYPE html>
     <html lang="en">
     <head>
@@ -243,10 +244,10 @@ return """
             <div class="summary">
                 <h2 class="section-title">Build Summary</h2>
                 <div class="summary-grid">
-                    <div class="summary-card ${getCardClass(diff?.totalDiffMs,threshold)}">
+                    <div class="summary-card ${getCardClass(diff?.totalDiffMs, threshold)}">
                         <div class="label">Total Build Time</div>
                         <div class="value">${"%.1f".format(totalSec)}s</div>
-                            ${renderDiff(diff?.totalDiffMs,threshold)}
+                            ${renderDiff(diff?.totalDiffMs, threshold)}
                     </div>
                     <div class="summary-card">
                         <div class="label">Modules Built</div>
@@ -256,13 +257,13 @@ return """
                         <div class="label">Tasks Executed</div>
                         <div class="value">${current.tasks.size}</div>
                     </div>
-                    ${renderRegressionCard(diff,threshold)}
+                    ${renderRegressionCard(diff, threshold)}
                 </div>
             </div>
             <div class="modules">
                 <h2 class="section-title">Module Breakdown</h2>
                 <div class="module-list">
-                    ${renderModules(current,diff,threshold)}
+                    ${renderModules(current, diff, threshold)}
                 </div>
             </div>
             <div  class="footer">
@@ -275,7 +276,7 @@ return """
 """.trimIndent()
     }
 
-    private fun getCardClass(diffMs: Long?,threshold: Long): String{
+    private fun getCardClass(diffMs: Long?, threshold: Long): String {
         if (diffMs == null) return ""
         return when {
             diffMs > threshold -> "regression"
@@ -283,7 +284,8 @@ return """
             else -> ""
         }
     }
-    private fun renderDiff(diffMs: Long?,threshold: Long): String{
+
+    private fun renderDiff(diffMs: Long?, threshold: Long): String {
         if (diffMs == null) return "<div class = 'diff'>First run </div>"
 
         val className = when {
@@ -298,15 +300,16 @@ return """
             diffMs < 0 -> "✅"
             else -> "="
         }
-        val sign = if (diffMs>0)"+" else ""
+        val sign = if (diffMs > 0) "+" else ""
         return "<div class ='diff $className'>$icon ${sign}${diffMs}ms</div>"
 
     }
-    private fun renderRegressionCard(diff: BuildDiff?,threshold: Long): String{
+
+    private fun renderRegressionCard(diff: BuildDiff?, threshold: Long): String {
         if (diff == null) return ""
 
-        val regressions = diff.moduleDiffs.count{ it.value > threshold}
-        val cardClass = if (regressions > 0 )"regression" else  "improvement"
+        val regressions = diff.moduleDiffs.count { it.value > threshold }
+        val cardClass = if (regressions > 0) "regression" else "improvement"
 
         return """
             <div class="summary-card $cardClass">
@@ -315,50 +318,56 @@ return """
                 </div>
         """.trimIndent()
     }
+
     private fun renderModules(
         current: BuildMetrics,
         diff: BuildDiff?,
         threshold: Long
-    ): String{
+    ): String {
         val sorted = current.modules.entries.sortedByDescending { it.value }
-        val maxTime = sorted.firstOrNull()?.value ?: 0L
+        val maxTime = sorted.firstOrNull()?.value ?: 1L
 
-        return sorted.joinToString("\n" ){(module,timeMs) ->
+        return sorted.joinToString("\n") { (module, timeMs) ->
             val diffMs = diff?.moduleDiffs?.get(module)
             val isNew = diff?.newModules?.contains(module) == true
             val isRegression = diffMs != null && diffMs > threshold
 
-            val badge = when  {
-                isNew -> "<span class='badge'>New</span>"
-                isRegression -> "<span class ='badge regression'>Regression</span>"
-                diffMs != null && diffMs > 0-> "<span class ='badge improvement'>Improvement</span>"
+            val badge = when {
+                isNew -> "<span class='badge new'>NEW</span>"
+                isRegression -> "<span class='badge regression'>REGRESSION</span>"
+                diffMs != null && diffMs < 0 -> "<span class='badge improvement'>IMPROVED</span>"
                 else -> ""
             }
+
             val diffHtml = if (diffMs != null) {
                 val sign = if (diffMs > 0) "+" else ""
-                val className = if (diffMs > threshold) "positive" else "negative"
-                "<div class='module-diff diff $className'>$sign$diffMs ms from previous build</div>"
+                val className = if (diffMs > 0) "positive" else "negative"
+                "<div class='module-diff diff $className'>$sign${diffMs}ms from previous build</div>"
             } else {
                 ""
             }
 
-            val percentage = (timeMs.toDouble() / maxTime * 100).toInt()
+            val percentage = if (maxTime > 0) {
+                (timeMs.toDouble() / maxTime * 100).toInt()
+            } else {
+                0
+            }
 
             """
-                <div class ="module-item">
-                <div class ="module-header">
-                <span class="module-name">$module</span>
-                $badge
-                </div>
-                    <div class ="module-time">${"%,d".format(timeMs)} ms </div>
+            <div class="module-item">
+                <div class="module-header">
+                    <div>
+                        <span class="module-name">$module</span>
+                        $badge
+                    </div>
+                    <div class="module-time">${"%,d".format(timeMs)} ms</div>
                 </div>
                 $diffHtml
                 <div class="progress-bar">
-                <div class="progress-fill" style="width: $percentage%"></div>
+                    <div class="progress-fill" style="width: ${percentage}%"></div>
                 </div>
-                </div>
-                """.trimIndent()
-
+            </div>
+        """.trimIndent()
         }
     }
 }
