@@ -271,4 +271,4 @@ Publishing to the Gradle Plugin Portal requires registering at [plugins.gradle.o
 
 > ⭐ If you found this helpful for learning how Gradle plugins work, feel free to star the repo!
 
-<img src="https://raw.githubusercontent.com/PatilParas05/buildpulse-android/main/builld.png" alt="BuildPulse-Report" height="50" width="5"/>
+![BuildPulse Report](https://raw.githubusercontent.com/PatilParas05/buildpulse-android/main/builld.png)
